@@ -1,1 +1,2 @@
 https://public.enigma.com/browse/collection/united-states-cancer-statistics/d3db7581-8891-4f19-b95a-9b653883d3a6
+This datasets provides various statistics on cancer cases such as age, type, location of victims, and numbre of cases. The age and location fields are the most likely be linked with other datasets to see if there are any contributing factors in demographics.
