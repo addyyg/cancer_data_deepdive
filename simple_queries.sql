@@ -12,3 +12,8 @@ order by area;
 select site, sex, race, event_type from cancer_stats.CancerBySite
 where event_type != "Mortality"
 order by count desc;
+
+--shows trends in the cases of leukemia in children
+select race, sex, event_type, year from cancer_stats.ChildCancer
+where site = "Leukemia"
+order by year;
