@@ -20,3 +20,15 @@ select serialid, area, count, population, sex, site, year, crude_rate, age_adjus
 from cancer_stats.CancerByArea
 where count is not null and population is not null and year != "2008-2012" and sex = "Male and Female" and race = "All Races" and site = "All Cancer Sites Combined" and site is not null and crude_rate != 0 and event_type = "Mortality"
 order by serialid
+--cleans up the ChildCancer table
+select serialid, age, age_adjusted_ci_lower, age_adjusted_ci_upper, age_adjusted_rate, count, event_type, population, race, sex, site, cast (year as int64) as year, crude_ci_lower, crude_ci_upper,crude_rate from cancer_stats.ChildCancer
+where count is not null and year != "2008-2012" and sex = "Male and Female"
+order by serialid
+--general cancer rates of people under 10.
+select serialid, age,  age_adjusted_ci_upper, age_adjusted_rate, count, population, cast (year as int64) as year from cancer_stats.AgeSpecificRates
+where count is not null and year != "2008-2012" and (age = "<1" or age = "1-4" or age =  "5-9")
+order by serialid
+--general cancer rates of people between 10- 19
+select serialid, age,  age_adjusted_ci_upper, age_adjusted_rate, count, population, cast (year as int64) as year from cancer_stats.AgeSpecificRates
+where count is not null and year != "2008-2012" and (age = "10-14" or age = "15-19")
+order by serialid
