@@ -32,3 +32,7 @@ order by serialid
 select serialid, age,  age_adjusted_ci_upper, age_adjusted_rate, count, population, cast (year as int64) as year from cancer_stats.AgeSpecificRates
 where count is not null and year != "2008-2012" and (age = "10-14" or age = "15-19")
 order by serialid
+--cleans up CancerBySite table
+select serialid, site, count, population, cast (year as int64) as year from cancer_stats.CancerBySite
+where count is not null and year != "2008-2012" and sex = "Male and Female"
+order by serialid
