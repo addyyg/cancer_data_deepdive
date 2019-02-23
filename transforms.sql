@@ -36,7 +36,3 @@ order by serialid
 select serialid, site, count, population, cast (year as int64) as year from cancer_stats.CancerBySite
 where count is not null and year != "2008-2012" and sex = "Male and Female"
 order by serialid
---Cast failure
-select serialid, cast(year as DATE), area, count, population, crude_rate, age_adjusted_rate
-from `cancer_stats.Cancer_By_Area_Mortality`   
---the above code was attempted for various different sets and failed multiple times because of the year not being in full date format
