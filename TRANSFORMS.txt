@@ -1,0 +1,6 @@
+--Cast failure
+
+select serialid, cast(year as DATE), area, count, population, crude_rate, age_adjusted_rate
+from `cancer_stats.Cancer_By_Area_Mortality`   
+
+--the above code was attempted for various different sets and failed multiple times because of the year not being in full date format
