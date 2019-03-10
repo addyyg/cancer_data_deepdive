@@ -2,12 +2,12 @@ import apache_beam as beam
 from apache_beam.io import ReadFromText
 from apache_beam.io import WriteToText
 
-# DoFn to perform on each element in the input PCollection.
+# DoFn to perform on each element in the input PCollection and focus on Alabama
 class AvgCancerStat(beam.DoFn):
   def process(self, element):
     crude_rate = Cancer_By_Area_Mortality.get('crude_rate')
     population = Cancer_By_Area_Mortality.get('population')
-    area = Cancer_By_Area_Mortality.get('area')
+    area = Cancer_By_Area_Mortality.get('area.alabama')
     age_adjusted_rate= Cancer_By_Area_Mortality.get('age_adjusted_rate')
 
   .apply(GroupByKey.<area, age_adjusted_rate>create())
