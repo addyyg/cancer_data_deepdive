@@ -5,10 +5,10 @@ from apache_beam.io import WriteToText
 # DoFn to perform on each element in the input PCollection.
 class AvgCancerStat(beam.DoFn):
   def process(self, element):
-    crude_rate = Cancer_By_Area_Mortality.get('crude_rate')
-    population = Cancer_By_Area_Mortality.get('population')
-    area = Cancer_By_Area_Mortality.get('area')
-    age_adjusted_rate= Cancer_By_Area_Mortality.get('age_adjusted_rate')
+    crude_rate = Cancer_By_Area_Incidence.get('crude_rate')
+    population = Cancer_By_Area_Incidence.get('population')
+    area = Cancer_By_Area_Incidence.get('area')
+    age_adjusted_rate= Cancer_By_Area_Incidence.get('age_adjusted_rate')
 
   .apply(GroupByKey.<area, age_adjusted_rate>create())
   .apply(GroupByKey.<area, crude_rate>create())
