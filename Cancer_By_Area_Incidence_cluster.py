@@ -6,7 +6,7 @@ from apache_beam.io import WriteToText
 class AvgCancerStat(beam.DoFn):
   def process(self, element):
     crude_rate = Cancer_By_Area_Mortality.get('crude_rate')
-    population = Cancer_By_Area_Mortality.get('populatoin')
+    population = Cancer_By_Area_Mortality.get('population')
     area = Cancer_By_Area_Mortality.get('area')
     age_adjusted_rate= Cancer_By_Area_Mortality.get('age_adjusted_rate')
 
@@ -33,8 +33,8 @@ options = {
 }
 opts = beam.pipeline.PipelineOptions(flags=[], **options)
 
-# Create beam pipeline using local runner
-with beam.Pipeline('DirectRunner', options=opts) as p:
+# Create beam pipeline using overall data flow runner
+with beam.Pipeline('DataflowRunner', options=opts) as p:
 
     query = p | 'Read Query' >> beam.io.Read(beam.io.BigQuerySource(query='SELECT crude_rate, population,age_adjusted_rate, area'))
     
