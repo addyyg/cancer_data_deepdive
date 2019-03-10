@@ -6,8 +6,8 @@ from apache_beam.io import WriteToText
 class AvgCancerStat(beam.DoFn):
   def process(self, element):
     crude_rate = Cancer_By_Area_Incidence.get('crude_rate')
-    population = Cancer_By_Area_Incidence.get('populatoin')
-    area = Cancer_By_Area_Incidence.get('area')
+    population = Cancer_By_Area_Incidence.get('population')
+    area = Cancer_By_Area_Incidence.get('area'.'alabama')
     age_adjusted_rate= Cancer_By_Area_Incidence.get('age_adjusted_rate')
 
   .apply(GroupByKey.<area, age_adjusted_rate>create())
