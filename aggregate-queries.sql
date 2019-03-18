@@ -1,34 +1,43 @@
---Inner Join that looks at the Intersection between area and the site on the body where
---the cancer is present. For example purposes the state of Alabama was chosen.
-select c.count
-from cancer_stats.CancerByArea c join cancer_stats.CancerBySite s on c.Area = s.Site
-where c.Area = 'Alabama'
-order by c.Year
---Inner Join that looks at the intersection of area and the age group. 
---For example purposes the state of Alabama was chosen. 
-select c.count
-from cancer_stats.CancerByArea c join cancer_stats.AgeSpecificRates s on c.Area = s.age
-where c.Area = 'Alabama'
-order by c.Year
---Inner Join that looks at the intersection of age and site of the cancer.
---For example purposes the age range 1-4 was chosen.
-select c.count
-from cancer_stats.AgeSpecificRates c join cancer_stats.CancerBySite s on c.age = s.Site
-where c.age = '1-4'
-order by c.Year
---Outer Join that looks at cancer by area and focuses on the specialization of brain cancer and gender.
---Outputs the total count and the sex, outer join shows when some counts are null despite the presence of area. 
-select c.count, c.sex
-from cancer_stats.CancerByArea c left join cancer_stats.brain_cancer cs on c.area = cs.sex
-where c.area = 'Alaska'
-order by c.year
---Outer Join that shows age specific rates compared to childhood cancer. It focuses on ages 1-4
-select c.count, c.age
-from cancer_stats.AgeSpecificRates c left join cancer_stats.ChildCancer cs on c.age = cs.race
-where c.age = '1-4'
-order by c.year
---Right Outer Join looking at area vs age rates and focusing on arranging counts by the year. 
-select cs.year, cs.count
-from cancer_stats.AgeSpecificRates c right join cancer_stats.CancerByArea cs on c.age = cs.area
-where cs.area = 'Alaska'
-order by cs.year
+--Looked at the average count of people per population center that had a case of cancer 
+-- with mortality and had an average count over 100. 
+select avg(count)
+from cancer_stats.Cancer_By_Area_Mortality 
+having avg(count) > 100
+--Looked at the average population of each area (state) as long as it was over 9,999,999 that had people with cancer that was fatal. 
+select avg(population), area
+from cancer_stats.Cancer_By_Area_Mortality 
+group by area
+having avg(population)>9999999
+--Selected for the min/max population in each area that had over 1,000,000 people in atleast one major measured population center. 
+select min(population), max(population), area
+from cancer_stats.Cancer_By_Area_Mortality 
+group by area
+having max(population)>1000000
+--Selected for the min/max population in each area that had under 1,000,000 people in atleast one major measured population center. 
+--also returned the total sum of all the counts regardless of year in the area. 
+select min(population), max(population), sum(count), area
+from cancer_stats.Cancer_By_Area_Mortality 
+group by area
+having max(population)<1000000
+--selected for the sites that had sum of counts above 1,000,000 and grouped by site. 
+select site, sum(count), avg(population)
+from cancer_stats.CancerBySiteV2
+group by site
+having sum(count)>1000000
+--Selected for the age adjusted rate of cancer of two age divisions between 10-20 and observed changes over the years. 
+--the having clause was used to eliminte any "total" fields that included all of the rates and ergo had a very high upper onfidence limit. 
+select year, age, avg(age_adjusted_ci_upper), avg(age_adjusted_rate )
+from cancer_stats.AgeRatesOver10
+group by year, age
+having avg(age_adjusted_ci_upper) < 100.0
+--Selected for the age adjusted rate of cancer of two age divisions between 0-10 and observed changes over the years.  
+select year, age, avg(age_adjusted_ci_upper), avg(age_adjusted_rate )
+from cancer_stats.AgeRatesOver10
+group by year, age
+having avg(age_adjusted_ci_upper) < 100.0
+--Looked at the year and site for brain cancer patients over 20 and how many total cases there were per area of the brain affected by year.
+--included the having clause to eliminate the total of all sites entries. 
+select year, site, sum(count), avg(population)
+from cancer_stats.brain_cancer_over_twenty
+group by year, site
+having sum(count) <100000
