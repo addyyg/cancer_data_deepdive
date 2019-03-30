@@ -1,43 +1,46 @@
---Looked at the average count of people per population center that had a case of cancer 
--- with mortality and had an average count over 100. 
-select avg(count)
+--Compared the populations from both the area and cancer by site tables. First separated where the count was greater than 1000 so it ignored smaller area
+--after this looked at any areas where the avg population from the cancer by area table was greater than or equal to the average from the age rates over 10 tables. 
+select area, avg(population)
 from cancer_stats.Cancer_By_Area_Mortality 
-having avg(count) > 100
---Looked at the average population of each area (state) as long as it was over 9,999,999 that had people with cancer that was fatal. 
-select avg(population), area
-from cancer_stats.Cancer_By_Area_Mortality 
+where count >1000
 group by area
-having avg(population)>9999999
---Selected for the min/max population in each area that had over 1,000,000 people in atleast one major measured population center. 
-select min(population), max(population), area
+having avg(population)>= (select avg(population) from cancer_stats.AgeRatesOver10)
+--This time looked at the mix and max populations of areas over 1000. Compared them to the age rates under 10 table to see if there were
+--population discrepancies between the age rates tables as an auxiliary benefit
+select area, min(population), max(population)
 from cancer_stats.Cancer_By_Area_Mortality 
+where count >1000
 group by area
-having max(population)>1000000
---Selected for the min/max population in each area that had under 1,000,000 people in atleast one major measured population center. 
---also returned the total sum of all the counts regardless of year in the area. 
-select min(population), max(population), sum(count), area
-from cancer_stats.Cancer_By_Area_Mortality 
-group by area
-having max(population)<1000000
---selected for the sites that had sum of counts above 1,000,000 and grouped by site. 
-select site, sum(count), avg(population)
+having max(population)>= (select avg(population) from cancer_stats.AgeRatesUnder10)
+--This function used the aggregate function min to see how many cancer cases by site in various populations were less than the minimum count seen in any area
+--could be used to isolate the rarest forms and types of cancers
+select site, count, population
 from cancer_stats.CancerBySiteV2
-group by site
-having sum(count)>1000000
---Selected for the age adjusted rate of cancer of two age divisions between 10-20 and observed changes over the years. 
---the having clause was used to eliminte any "total" fields that included all of the rates and ergo had a very high upper onfidence limit. 
+where count <= (select min(count) from cancer_stats.Cancer_By_Area_Mortality)
+--looked at the age rates over ten and saw for which groups the average adjusted rate was less than the rate seen by area.
 select year, age, avg(age_adjusted_ci_upper), avg(age_adjusted_rate )
 from cancer_stats.AgeRatesOver10
 group by year, age
-having avg(age_adjusted_ci_upper) < 100.0
---Selected for the age adjusted rate of cancer of two age divisions between 0-10 and observed changes over the years.  
-select year, age, avg(age_adjusted_ci_upper), avg(age_adjusted_rate )
-from cancer_stats.AgeRatesOver10
-group by year, age
-having avg(age_adjusted_ci_upper) < 100.0
---Looked at the year and site for brain cancer patients over 20 and how many total cases there were per area of the brain affected by year.
---included the having clause to eliminate the total of all sites entries. 
-select year, site, sum(count), avg(population)
-from cancer_stats.brain_cancer_over_twenty
-group by year, site
-having sum(count) <100000
+having avg(age_adjusted_rate) < (select avg(age_adjusted_rate) from cancer_stats.Cancer_By_Area_Incidence)
+--a join to see if there are any eye and orbit instances in alaska based on similar count numbers 
+select c.count, c.population
+from cancer_stats.Cancer_By_Area_Mortality c 
+join 
+  (
+    select count 
+    from [cancer_stats.CancerBySiteV2] s
+    where s.site = "Eye and Orbit"
+   ) as a
+on c.count = a.count
+where c.Area = 'Alaska'
+--
+select c.count, c.population
+from cancer_stats.Cancer_By_Area_Mortality c 
+join 
+  (
+    select count 
+    from [cancer_stats.CancerBySiteV2] s
+    where s.site = "Eye and Orbit"
+   ) as a
+on c.count = a.count
+where c.Area = 'Alaska'
