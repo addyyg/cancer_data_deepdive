@@ -1,12 +1,12 @@
 The first query will be between the table for Cancer_By_Area_Incidence and Clinical_Trial_Location.
 This would use an inner join to understand the intersection of trials and incidence.
-Transform here would be a pardo to try and check the counts of intersections as well as the average population of the intersection to see 
+Transform here would be a pardo to try and check the enrollment counts of intersections as well as the average population of the intersection to see 
 how many people were present in the clinical trial vs had cancer.
 
 The second query will be using a join between Clinical_Trial_Location and Cancer_By_Area-Mortality. 
 This would be used to see all of the cases where death ocurred and clinical trials were present. 
 These could indicate the failure rate of clinical trials.
-Transform here would be a pardo to try and check the counts of intersections as well as the average population of the intersection to see 
+Transform here would be a pardo to try and check the enrollment counts of intersections as well as the average population of the intersection to see 
 how many people were present in the clinical trial vs died of cancer.
 
 The third query would be sub-query involving a join between the location and cancer_by_area and then the second join between cancer_by_area 
@@ -15,11 +15,11 @@ the transform here would be a pardo as well as aggregate functions for the inter
 
 The fourth query would be a join between the years for the clinical_trial_main and cancer_by_area_mortality. 
 This join would use aggregate function of average to see which year had the average most trials vs deaths.
-For apache beam, flatten could be used to isolate just the years and reduce it to one result that could be used.
+For apache beam, pardo ould be used to isolate just the years from the timsetamps.
 
 The fifth query would be a join on the basis of years between clinical_trial_main and cancer_by_area_incidence
 This join would use aggregate function of average to see which year had the average most trials vs cancer but survival
-For apache beam, flatten could be used to isolate just the years and reduce it to one result that could be used.
+For apache beam, pardo ould be used to isolate just the years from the timsetamps.
 
 The sixth query would be a join on the basis of years between clinical_trials_main and brain_cancer. 
 This would show which years had more brain cancer and can use select statement to isolate which trials were specfic for main.
