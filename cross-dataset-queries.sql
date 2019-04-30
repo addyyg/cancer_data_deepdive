@@ -21,12 +21,12 @@ from [cancer_stats.ChildCancerV2] c join [cancer_trials.trials_main_year] s on c
 where c.year = 2000 and s.enrollment is not null 
 group by c.count, s.enrollment
 --join on the basis of years using beam transformed table. looks at age rates over 10
-select c.count, s.enrollment
+select c.count, s.enrollment, s.condition
 from [cancer_stats.AgeRatesOver10] c join [cancer_trials.trials_main_year] s on c.year = s.start and c.year = s.primary
 where c.year = 2000 and s.enrollment is not null and c.count>1000 and c.count<3000
-group by c.count, s.enrollment
+group by c.count, s.enrollment, s.condition
 --join on the basis of years using beam transformed table. looks at age rates under 10
-select c.count, s.enrollment
+select c.count, s.enrollment, s.condition
 from [cancer_stats.AgeRatesUnder10] c join [cancer_trials.trials_main_year] s on c.year = s.start and c.year = s.primary
 where c.year = 2000 and s.enrollment is not null and c.count>1000 and c.count<3000
-group by c.count, s.enrollment
+group by c.count, s.enrollment, s.condition
