@@ -1,3 +1,8 @@
 The workflow will be created for Dataset 2 which is cancer_trials. 
 This dataset has to do with the trials done on patients to cure them from various different diseases all recorded by the national institutes of health. 
 Tasks: 
+1. transform main_trials table. All other tasks are dependent on this as this is the table with the primary key for the NIH NCTNumbers. The major task here is to isolate the year so joins can happen with the other dataset and we can look at years vs trials.
+2. transform trials_by_area table. This is the next task and is dependent on the previous task being successful so that the primary keys and foreign keys link up properly. This involved isolating the states as that was the basis used in dataset 1.
+3. transform arm_group table. This task is dependent on the first task being successful, but not the second. This involves looking at the different arm groups and eliminating those that did not actually occur (all attempts are initially listed) and isolating those that had verified results. 
+4. Transform both the primary and secondary outcomes. This task is also dependent on the first taks, but not any of the others. This involved isolating the impacts that were not null and were verified. 
+  
