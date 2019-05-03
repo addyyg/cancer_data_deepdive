@@ -27,11 +27,18 @@ class AvgCancerStat(beam.DoFn):
     
 PROJECT_ID = os.environ['dogwood-outcome-231223']
 
+
 # Project ID is required when using the BQ source
 options = {
     'project': PROJECT_ID
+    'streaming': FALSE
+    'staging_location': gs://cancer_stats
+    'runner':DataflowRunner
 }
-opts = beam.pipeline.PipelineOptions(flags=[], **options)
+opts = beam.pipeline.PipelineOptions()
+options.view_as(SetupOptions).save_main_session = True
+google_cloud_options = options.view_as(GoogleCloudOptions)
+google_cloud_options.project = 'PROJECT_ID'
 
 # Create beam pipeline using overall data flow runner
 with beam.Pipeline('DataflowRunner', options=opts) as p:
