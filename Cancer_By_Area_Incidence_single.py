@@ -36,7 +36,7 @@ opts = beam.pipeline.PipelineOptions(flags=[], **options)
 # Create beam pipeline using local runner
 with beam.Pipeline('DirectRunner', options=opts) as p:
 
-    query = p | 'Read Query' >> beam.io.Read(beam.io.BigQuerySource(query='SELECT crude_rate, population,age_adjusted_rate, area'))
+    query = p | 'Read Query' >> beam.io.Read(beam.io.BigQuerySource(query='SELECT crude_rate, population,age_adjusted_rate, area FROM cancer_stats.Cancer_By_Area_Incidence LIMIT 1000'))
     
     formatted_dob_pcoll = query_results | 'Format DOB' >> beam.ParDo(AvgCancerStat())
 
