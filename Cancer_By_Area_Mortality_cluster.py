@@ -30,6 +30,15 @@ PROJECT_ID = os.environ['dogwood-outcome-231223']
 # Project ID is required when using the BQ source
 options = {
     'project': PROJECT_ID
+    'streaming': FALSE
+    'staging_location': gs://cancer_stats
+    'runner':DataflowRunner
+}
+opts = beam.pipeline.PipelineOptions()
+options.view_as(SetupOptions).save_main_session = True
+google_cloud_options = options.view_as(GoogleCloudOptions)
+google_cloud_options.project = 'PROJECT_ID'options = {
+    'project': PROJECT_ID
 }
 opts = beam.pipeline.PipelineOptions(flags=[], **options)
 
