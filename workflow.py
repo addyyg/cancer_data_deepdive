@@ -15,7 +15,7 @@ sql_arm= 'create table ' + new_dataset + '.Arm_Temp as ' \
            'from ' + raw_dataset + '.ArmGroup ' \
            'select distinct nct_number,arm_group_label,arm_group_type,description,serialid ' \
            'from cancer_trials.NIHClinicalTrials_Arm_Group' \
-           'where arm_group_label like '%cancer%' or description like '%cancer%' '\
+           'where arm_group_label like \'%cancer%\' or description like \'%cancer%\' '\
            'order by nct_number'
 
 sql_location='create table ' + new_dataset + '.Location_Temp as ' \
@@ -36,7 +36,7 @@ sql_primary = 'create table ' + new_dataset + '.Primary_Temp as ' \
 sql_secondary= 'create table ' + new_dataset + '.Secondary_Temp as ' \
            'from ' + raw_dataset + '.ArmGroup ' \
            'select distinct nct_number,measure,time_frame,description,serialid ' \
-           'from cancer_trials.NIHClinicalTrials_Secondary_Outcomes' \
+           'from cancer_trials.vi ' \
            'where measure is not null'\
            'order by nct_number'
 
