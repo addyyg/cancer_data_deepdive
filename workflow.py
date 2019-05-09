@@ -22,7 +22,7 @@ sql_location='create table ' + new_dataset + '.Location_Temp as ' \
            'from ' + raw_dataset + '.Location ' \
            'select distinct nct_number,facility_name,facility_city,facility_state,facility_country,serialid ' \
            'from cancer_trials.NIHClinicalTrials_Location ' \
-           'where facility_country == 'United States' '\
+           'where facility_country == \'United States\' '\
            'and nct_number is not null '\
            'order by nct_number'
 
